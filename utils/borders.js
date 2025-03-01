@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   horizontal: "─",
   vertical: "│",
   top_t: "┬",
@@ -10,4 +10,4 @@ module.exports = {
   top_right: "╮",
   bottom_left: "╰",
   bottom_right: "╯",
-}
+};
