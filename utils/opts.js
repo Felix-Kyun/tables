@@ -13,7 +13,7 @@ program
   .option("-H, --header", "first row is header", false)
   .option("-c, --custom-header <header>", "custom header", false)
   .option("-l, --limit <limit>", "limit the number of rows to display", 0)
-.option("-f, --format <format>", "format the output", "table");
+.option("-f, --format <format>", "format the output");
 
 const opts = program.parse(process.argv).opts();
 
