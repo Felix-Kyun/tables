@@ -11,10 +11,23 @@ processData((data) => {
 
   // final data
   const matrix = [];
-  const columnMax = [];
+  const columnMax = []; // stores the max length used in each of the columns
 
-  rows.forEach((row, rindex) => {
+  // add headers if enabled
+  if (opts.customHeader) {
     matrix.push([]);
+    const headers = opts.customHeader.split(",");
+    headers.forEach((header, index) => {
+      matrix[0].push(header);
+
+      // if column length is larger then update
+      if (!columnMax[index] || columnMax[index] < header.length)
+        columnMax[index] = header.length;
+    });
+  }
+
+  rows.forEach((row) => {
+    const current_row = [];
     const columns = row.split(opts.delimiter);
 
     columns.forEach((column, cindex) => {
@@ -25,10 +38,11 @@ processData((data) => {
       if (!columnMax[cindex] || columnMax[cindex] < column.length)
         columnMax[cindex] = column.length;
 
-      matrix[rindex].push(column);
+      current_row.push(column);
     });
+
+    matrix.push(current_row);
   });
 
-  printTable(matrix, columnMax);
+  printTable(matrix, columnMax, opts.format, (opts.customHeader || opts.header));
 });
-
