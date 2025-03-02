@@ -18,5 +18,8 @@ program
 const opts = program.parse(process.argv).opts();
 
 opts.delimiter = new RegExp(opts.delimiter);
+if (opts.limit) opts.limit = parseInt(opts.limit);
+if (opts.format) opts.format = opts.format.split(",");
+if (opts.customHeader) opts.customHeader = opts.customHeader.split(",");
 
 export default opts;

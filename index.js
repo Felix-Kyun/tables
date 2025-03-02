@@ -16,7 +16,7 @@ processData((data) => {
   // add headers if enabled
   if (opts.customHeader) {
     matrix.push([]);
-    const headers = opts.customHeader.split(",");
+    const headers = opts.customHeader;
     headers.forEach((header, index) => {
       matrix[0].push(header);
 
