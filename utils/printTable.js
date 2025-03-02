@@ -2,17 +2,13 @@ import borders from "./borders.js";
 import printBorder from "./printBorder.js";
 import lpad from "./lpad.js";
 
-export default function printTable(matrix, max, format = null, header_enabled) {
+export default function printTable(matrix, max, header_enabled) {
   let total = 1;
   max.forEach((i) => (total += i + 3));
 
-  // new max for border
-  const newMax = [];
-  format.forEach((i) => newMax.push(max[i]));
-
   // top border {{
   printBorder(
-    newMax,
+    max,
     borders.top_left,
     borders.horizontal,
     borders.top_t,
@@ -26,7 +22,7 @@ export default function printTable(matrix, max, format = null, header_enabled) {
     matrix.shift();
 
     printBorder(
-      newMax,
+      max,
       borders.left_t,
       borders.horizontal,
       borders.cross,
@@ -35,13 +31,13 @@ export default function printTable(matrix, max, format = null, header_enabled) {
   }
 
   for (const row of matrix) {
-    printRow(row, max, format);
+    printRow(row, max);
   }
 
   // bottom border
 
   printBorder(
-    newMax,
+    max,
     borders.bottom_left,
     borders.horizontal,
     borders.bottom_t,
@@ -49,7 +45,7 @@ export default function printTable(matrix, max, format = null, header_enabled) {
   );
 }
 
-function printRow(row, max, format = null) {
+function printRow(row, max) {
   // fix row if they are more or less than columns in table
   if (row.length < max.length) {
     const diff = max.length - row.length;
@@ -62,14 +58,9 @@ function printRow(row, max, format = null) {
   }
 
   let finalRow = "";
-  if (format) {
-    for (const pos of format) {
-      finalRow += lpad(row[pos], max[pos]) + ` ${borders.vertical} `;
-    }
-  } else {
-    row.forEach(
-      (i, index) => (finalRow += lpad(i, max[index]) + ` ${borders.vertical} `),
-    );
-  }
+
+  row.forEach(
+    (i, index) => (finalRow += lpad(i, max[index]) + ` ${borders.vertical} `),
+  );
   process.stdout.write(`${borders.vertical} ${finalRow}\n`);
 }

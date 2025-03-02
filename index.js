@@ -2,6 +2,7 @@
 import processData from "./utils/stdin.js";
 import printTable from "./utils/printTable.js";
 import opts from "./utils/opts.js";
+import range from "./utils/range.js";
 
 processData((data) => {
   const rows = data.split("\n");
@@ -15,34 +16,46 @@ processData((data) => {
 
   // add headers if enabled
   if (opts.customHeader) {
-    matrix.push([]);
+    const header_arr = [];
     const headers = opts.customHeader;
     headers.forEach((header, index) => {
-      matrix[0].push(header);
+      header_arr.push(header);
 
       // if column length is larger then update
       if (!columnMax[index] || columnMax[index] < header.length)
         columnMax[index] = header.length;
     });
+    matrix.push(header_arr);
   }
 
-  rows.forEach((row) => {
+  const processRow = (row) => {
     const current_row = [];
-    const columns = row.split(opts.delimiter);
+    row = row.split(opts.delimiter);
 
-    columns.forEach((column, cindex) => {
-      // trim the item if enabled
+    // if format enabled only keep the rows we need
+    if (opts.format) {
+      // row = row.filter((_, index) => opts.format.includes(index));
+      const new_row = [];
+      opts.format.forEach((index) => {
+        new_row.push(row[index]);
+      });
+      row = new_row;
+    }
+
+    row.forEach((column, cindex) => {
       if (opts.trim) column = column.trim();
 
-      // if column length is larger than update
-      if (!columnMax[cindex] || columnMax[cindex] < column.length)
+      if (!columnMax[cindex] || columnMax[cindex] < column.length) {
         columnMax[cindex] = column.length;
+      }
 
       current_row.push(column);
     });
 
     matrix.push(current_row);
-  });
+  };
 
-  printTable(matrix, columnMax, opts.format, (opts.customHeader || opts.header));
+  rows.forEach(processRow);
+
+  printTable(matrix, columnMax, opts.customHeader || opts.header);
 });
