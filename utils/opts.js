@@ -17,6 +17,7 @@ program
   .option("-H, --header", "first row is header", false)
   .option("-c, --custom-header <header>", "custom header", false)
   .option("-l, --limit <limit>", "limit the number of rows to display", 0)
+  .option("-s, --skip <skip>", "skip the number of rows", 0)
   .option("-f, --format <format>", "format the output", false);
 
 const opts = program.parse(process.argv).opts();
@@ -30,6 +31,7 @@ if (opts.format) {
     return Number(i.trim());
   });
 }
+if (opts.skip) opts.skip = Number(opts.skip);
 if (opts.customHeader) opts.customHeader = opts.customHeader.split(",");
 
 export default opts;

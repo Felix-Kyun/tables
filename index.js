@@ -28,7 +28,13 @@ processData((data) => {
     matrix.push(header_arr);
   }
 
-  const processRow = (row) => {
+  const processRow = (row, rindex) => {
+    // skip the row if skip is enabled
+    if (opts.skip && rindex < opts.skip) return;
+
+    // limit results if enabled
+    if (opts.limit && rindex >= opts.limit + opts.skip) return;
+
     const current_row = [];
     row = row.split(opts.delimiter);
 
